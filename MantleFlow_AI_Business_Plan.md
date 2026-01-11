@@ -8,7 +8,7 @@
 | Trường | Nội dung |
 |--------|----------|
 | Tên dự án | MantleFlow AI |
-| Phiên bản | 1.1 |
+| Phiên bản | 1.2 |
 | Ngày lập | 11/01/2026 |
 | Phân loại | Tài liệu nội bộ |
 | Người nhận | Ban Giám Khảo Hackathon |
@@ -69,26 +69,26 @@ Chúng tôi cung cấp giải pháp toàn diện bao gồm:
 
 Hệ thống MantleFlow AI được xây dựng trên 4 trụ cột công nghệ chính:
 
-### 3.1 Backend Architecture (Hệ thống Máy chủ)
-Hệ thống Backend đóng vai trò trung tâm điều phối, đảm bảo tính ổn định và bảo mật cho toàn bộ nền tảng.
+### 3.1 Backend Architecture (Hệ thống Thanh Toán & Quản lý)
+Hệ thống Backend được xây dựng trên nền tảng .NET Core mạnh mẽ, đảm nhiệm logic nghiệp vụ phức tạp về thanh toán và quản lý khoản vay.
 
 **Technology Stack:**
-- **Runtime Environment**: Node.js với framework Express (tối ưu cho I/O operations).
-- **Database**: PostgreSQL (lưu trữ dữ liệu quan hệ như Users, Invoices, Loans) kết hợp Prisma ORM.
-- **Job Queue**: Redis + BullMQ (xử lý các tác vụ nền như gửi email, tracking blockchain events).
-- **Authentication**: SIWE (Sign-In with Ethereum) kết hợp JWT cho session management.
+- **Framework**: ASP.NET Core 8.0 Web API (High performance).
+- **Database**: PostgreSQL kết hợp Entity Framework Core (Code-first migration).
+- **Blockchain Integration**: Nethereum để tương tác với Smart Contracts.
+- **Authentication**: JWT Bearer Token + ASP.NET Identity.
 
 **Các Modules Chính:**
-1.  **API Gateway**: Quản lý ~30 endpoints RESTful, xử lý rate limiting và validation.
-2.  **Event Listener Service**: Lắng nghe real-time events từ Mantle Network (LoanCreated, PaymentConfirmed) để đồng bộ trạng thái database.
-3.  **Notification Service**: Hệ thống đa kênh (Email, SMS) tích hợp với AI Agent để nhắc nợ tự động.
-4.  **Integration Layer**: Kết nối an toàn với AI Engine và các dịch vụ bên thứ 3 (KYC, Banking).
+1.  **Loan Controller**: Quản lý vòng đời khoản vay (Create, Repay, Default).
+2.  **Oracle Controller**: Xử lý logic thanh toán off-chain và đồng bộ trạng thái on-chain.
+3.  **Payment Gateway Integration**: Kết nối cổng thanh toán để nhận tiền fiat từ SMEs.
+4.  **Swagger Documentation**: Cung cấp tài liệu API trực quan cho Frontend và đối tác tích hợp.
 
 ### 3.2 AI Engine (Trí tuệ Nhân tạo)
 - **OCR Service**: Sử dụng Google Gemini 1.5 Flash để trích xuất dữ liệu từ hóa đơn (PDF/Image) với độ chính xác cao đối với format tiếng Việt.
 - **Risk Scoring Model**: Thuật toán đánh giá 8 yếu tố (Wallet age, Transaction volume, Business age...) để phân loại Tier tín dụng (A/B/C/D).
 - **OSINT Checker**: Hệ thống rà soát 5 điểm chạm số (Website, LinkedIn, Maps, News, Social) để phát hiện công ty ma.
-- **AI Agent**: Bot tự động hóa quy trình đòi nợ theo kịch bản leo thang (Escalation Ladder).
+- **AI Agent (FastAPI)**: Microservice độc lập phục vụ các tác vụ AI chuyên sâu.
 
 ### 3.3 Smart Contracts (Blockchain)
 Triển khai trên **Mantle Sepolia Testnet** (Solidity 0.8.20):
@@ -146,9 +146,9 @@ MantleFlow AI hoạt động theo mô hình thu phí giao dịch B2B:
 ### Phase 1: MVP & Validation (Q1 2026) - **Hiện tại**
 - [x] Hoàn thiện 7 Smart Contracts cốt lõi.
 - [x] Tích hợp AI Engine (OCR, Risk, OSINT).
-- [ ] Hoàn tất Backend API (30 endpoints).
-- [ ] Triển khai Security Audit.
-- [ ] Mainnet Launch trên Mantle Network.
+- [x] Triển khai Backend .NET Core cho logic thanh toán.
+- [ ] Hoàn tất Frontend Integration.
+- [ ] Security Audit & Mainnet Launch.
 
 ### Phase 2: User Acquisition (Q2 2026)
 - Chương trình Pilot với 10 doanh nghiệp VNR500.
@@ -200,7 +200,7 @@ MantleFlow AI hoạt động theo mô hình thu phí giao dịch B2B:
 
 ### Đội ngũ Hiện tại (Core Team)
 - **Smart Contract Lead**: Phụ trách Blockchain architecture và security.
-- **Backend Lead**: Phụ trách API, Database và tích hợp hệ thống.
+- **Backend Lead (.NET)**: Phụ trách Payment logic, Database, System Architecture.
 - **Frontend & AI Lead**: Phụ trách UX/UI, AI models và OSINT algorithms.
 
 ### Kế hoạch Mở rộng (Hiring Plan Q2 2026)

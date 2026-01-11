@@ -1,9 +1,10 @@
 # MantleFlow AI - Full Project Setup & Guide
 
-Hướng dẫn cài đặt và chạy toàn bộ dự án MantleFlow AI gồm 3 thành phần chính:
+Hướng dẫn cài đặt và chạy toàn bộ dự án MantleFlow AI gồm 4 thành phần chính:
 1.  **AI Engine** (FastAPI Python - Backend & AI Logic)
-2.  **Frontend** (ReactJS + Vite - User Interface)
-3.  **Smart Contracts** (Mantle Network - Blockchain Layer)
+2.  **Payment Backend** (ASP.NET Core - Payment & Loan Logic)
+3.  **Frontend** (ReactJS + Vite - User Interface)
+4.  **Smart Contracts** (Mantle Network - Blockchain Layer)
 
 ---
 
@@ -12,102 +13,105 @@ Hướng dẫn cài đặt và chạy toàn bộ dự án MantleFlow AI gồm 3 
 Hãy đảm bảo bạn đã cài đặt các công cụ sau:
 - **Node.js** v18+ (cho Frontend)
 - **Python** 3.10+ (cho AI Engine)
+- **.NET SDK** 8.0 (cho Payment Backend)
 - **Foundry** (Forge, Cast) (cho Smart Contracts)
-- **Git**
+- **PostgreSQL** (Database)
 
 ---
 
-## 🤖 2. AI Engine & Backend Setup
+## 🤖 2. AI Engine Setup (Python)
 
 Dịch vụ này cung cấp API cho OCR, Risk Scoring, và OSINT check.
 
 **Thư mục:** `ai-engine/`
 
-### Bước 1: Khởi tạo môi trường Python
-```bash
-cd ai-engine
-# Tạo virtual environment
-python -m venv venv
+1.  **Cài đặt môi trường**:
+    ```bash
+    cd ai-engine
+    python -m venv venv
+    # Windows:
+    .\venv\Scripts\activate
+    # Mac/Linux:
+    source venv/bin/activate
+    ```
 
-# Activate (Windows)
-.\venv\Scripts\activate
-# Activate (Mac/Linux)
-source venv/bin/activate
-```
+2.  **Cài đặt thư viện & Cấu hình**:
+    ```bash
+    pip install -r requirements.txt
+    # Tạo file .env và điền GEMINI_API_KEY
+    ```
 
-### Bước 2: Cài đặt thư viện
-```bash
-pip install -r requirements.txt
-```
-
-### Bước 3: Cấu hình Environment
-Tạo file `.env` từ `.env.example` (nếu có) và điền API Key (Gemini API Key).
-
-### Bước 4: Chạy Server
-```bash
-# Chạy server với Uvicorn (Hot reload)
-uvicorn app.main:app --reload --port 8000
-```
-*API sẽ chạy tại: `http://localhost:8000`*
-*Docs (Swagger UI): `http://localhost:8000/docs`*
+3.  **Chạy Server**:
+    ```bash
+    uvicorn app.main:app --reload --port 8000
+    ```
+    *API chạy tại: `http://localhost:8000`*
 
 ---
 
-## 💻 3. Frontend Setup
+## 💳 3. Payment Backend Setup (.NET Core)
+
+Dịch vụ xử lý logic thanh toán, quản lý khoản vay và xác thực người dùng.
+
+**Thư mục:** `BE/BE/`
+
+1.  **Cấu hình Database**:
+    Mở file `BE/BE/appsettings.json` và cập nhật `ConnectionStrings:DefaultConnection` với thông tin PostgreSQL của bạn:
+    ```json
+    "DefaultConnection": "Host=localhost;Port=5432;Database=HackathonDb;Username=postgres;Password=yourpassword"
+    ```
+
+2.  **Chạy Server**:
+    ```bash
+    cd BE/BE
+    dotnet restore
+    dotnet run
+    ```
+    *API chạy tại: `http://localhost:5000` (hoặc port hiển thị)*
+    *Swagger Docs: `http://localhost:5000/swagger`*
+
+---
+
+## 💻 4. Frontend Setup (React)
 
 Giao diện người dùng web application.
 
 **Thư mục:** `frontend/`
 
-### Bước 1: Cài đặt dependencies
-```bash
-cd frontend
-npm install
-```
-
-### Bước 2: Chạy Development Server
-```bash
-npm run dev
-```
-*App sẽ chạy tại: `http://localhost:5173` (hoặc port hiển thị trên terminal)*
+1.  **Cài đặt & Chạy**:
+    ```bash
+    cd frontend
+    npm install
+    npm run dev
+    ```
+    *App chạy tại: `http://localhost:5173`*
 
 ---
 
-## ⛓️ 4. Smart Contracts Setup
+## ⛓️ 5. Smart Contracts Setup (Foundry)
 
-Triển khai và kiểm thử Smart Contracts trên Mantle Network.
+Triển khai Smart Contracts trên Mantle Network.
 
 **Thư mục:** `mantleflow-contracts/`
 
-### Bước 1: Cài đặt dependencies
-```bash
-cd mantleflow-contracts
-forge install
-```
+1.  **Build & Test**:
+    ```bash
+    cd mantleflow-contracts
+    forge build
+    forge test
+    ```
 
-### Bước 2: Compile & Test
-```bash
-# Build contracts
-forge build
-
-# Run tests
-forge test
-```
-
-### Bước 3: Deploy (Mantle Sepolia)
-```bash
-# Tạo file .env và điền PRIVATE_KEY
-cp .env.example .env
-
-# Deploy script
-forge script script/Deploy.s.sol:Deploy --rpc-url https://rpc.sepolia.mantle.xyz --broadcast
-```
+2.  **Deploy**:
+    ```bash
+    cp .env.example .env # Điền Private Key
+    forge script script/Deploy.s.sol:Deploy --rpc-url https://rpc.sepolia.mantle.xyz --broadcast
+    ```
 
 ---
 
-## 🚀 5. Quick Start (Chạy cả 3 cùng lúc)
+## 🚀 6. Quick Start (Chạy toàn bộ dự án)
 
-Mở 3 cửa sổ Terminal riêng biệt:
+Mở 4 cửa sổ Terminal riêng biệt:
 
 **Terminal 1 (AI Engine):**
 ```bash
@@ -116,13 +120,19 @@ cd ai-engine
 uvicorn app.main:app --reload
 ```
 
-**Terminal 2 (Frontend):**
+**Terminal 2 (Payment BE):**
+```bash
+cd BE/BE
+dotnet run
+```
+
+**Terminal 3 (Frontend):**
 ```bash
 cd frontend
 npm run dev
 ```
 
-**Terminal 3 (Contracts - Optional):**
+**Terminal 4 (Contracts):**
 ```bash
 cd mantleflow-contracts
 forge test
@@ -134,24 +144,12 @@ forge test
 
 ```
 Mantleflow-AI/
-├── ai-engine/              # Python FastAPI Backend + AI Models
-│   ├── app/                # Source code
-│   └── requirements.txt    # Dependencies
+├── ai-engine/              # Python FastAPI (AI Models)
+├── BE/                     # ASP.NET Core API (Payment Backend)
+│   └── BE/                 # Source code (Controllers, Models)
 ├── frontend/               # ReactJS + Vite App
-│   ├── src/                # Components & Pages
-│   └── package.json        # Dependencies
 └── mantleflow-contracts/   # Solidity Smart Contracts
-    ├── src/                # Contract Sources (InvoiceNFT, LendingPool...)
-    └── script/             # Defloyment Scripts
 ```
-
----
-
-## 📝 Notes for Judges/Reviewers
-
-- **Backend Logic**: Hiện tại logic Backend được tích hợp trực tiếp trong `ai-engine` (FastAPI) để phục vụ Hackathon nhanh chóng.
-- **Data**: Hệ thống sử dụng dữ liệu mẫu hoặc mock data nếu chưa kết nối Database production.
-- **Smart Contracts**: Đã deploy trên Mantle Sepolia Testnet.
 
 ---
 *MantleFlow AI Team - Hackathon 2026*
